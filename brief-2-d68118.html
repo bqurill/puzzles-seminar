@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Бриф команды 2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=Unbounded:wght@500;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE everyday: a working brief a student team reads and fills in during 18 minutes
+   IDEA a printed team brief from a puzzle book: task first, rules with drawn examples, then a worksheet
+   PICTURE the worked example of the puzzle, drawn large
+   COLOUR white, ink #0e1726, seminar blue #1b7cff header band, sun yellow for the one tip
+   TYPE Unbounded titles and numbers, Onest text
+   LAYOUT one calm column up to 860px; plan as three blocks; worksheet in panels; stacks on phones */
+:root{color-scheme:light dark;
+--bg:light-dark(#ffffff,#0c1320);--ink:light-dark(#0e1726,#eef3fb);--mute:light-dark(#566274,#9eabbd);
+--line:light-dark(#c9d3e1,#2c3a52);--soft:light-dark(#eef4ff,#14223a);--paper:light-dark(#ffffff,#111b2c);
+--cell:light-dark(#1b7cff,#4b98ff);--blue:#1b7cff;--sun:#ffd23f;--red:#ff5a4e;--green:#1fb26b}
+:root[data-theme=light]{color-scheme:light}
+:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:17px/1.55 Onest,system-ui,sans-serif;overflow-x:clip}
+h1,h2,h3{font-family:Unbounded,Onest,sans-serif;letter-spacing:-.02em;line-height:1.1;margin:0;text-wrap:balance}
+h1{font-size:clamp(30px,5vw,48px)}
+h2{font-size:clamp(22px,3vw,30px);margin:0 0 16px}
+h3{font-size:19px;margin:0 0 10px}
+.band{background:var(--blue);color:#fff;padding:32px max(5vw,16px) 30px}
+.wrap{max-width:860px;margin:0 auto}
+.kick{font-weight:600;color:#ffe48a;margin-bottom:10px}
+.band p{font-size:19px;max-width:720px;margin:16px 0 0}
+.puz{display:inline-block;margin-top:18px;background:#fff;color:#0e1726;font-weight:600;padding:12px 18px;border-radius:12px;text-decoration:none}
+section{padding:36px max(5vw,16px) 0}
+section:last-of-type{padding-bottom:56px}
+.plan{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.step{background:var(--soft);border-radius:16px;padding:18px 20px}
+.step .t{font:700 15px Unbounded,sans-serif;color:var(--blue);margin-bottom:6px;white-space:nowrap}
+.step ul{margin:0;padding-left:18px}
+.step li{margin:4px 0;font-size:16px}
+ol.rules{margin:0;padding-left:22px}
+ol.rules li{margin:8px 0}
+.tip{background:var(--sun);color:#0e1726;border-radius:16px;padding:18px 22px;margin-top:20px}
+.tip b{display:block;margin-bottom:4px}
+.ex{margin-top:26px}
+.rows{display:grid;gap:8px;margin-bottom:22px}
+.rows div{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.rowsvg{width:320px;max-width:100%;height:auto}
+.ok{color:var(--green);font-weight:600}.bad{color:var(--red);font-weight:600}
+.figs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+figure{margin:0;background:var(--paper);border:2px solid var(--line);border-radius:16px;padding:18px;display:grid;justify-items:center;gap:10px}
+figure svg{width:100%;max-width:300px;height:auto}
+figcaption{font-size:15px;color:var(--mute)}
+svg text{font-family:Unbounded,Onest,sans-serif;font-weight:700;fill:var(--ink)}
+.fill{fill:var(--cell)}.grid{stroke:var(--line);stroke-width:1.5}.cellb{fill:var(--paper);stroke:var(--line);stroke-width:1.5}.clue{fill:var(--soft)}
+.loop{stroke:var(--cell);stroke-width:7;stroke-linecap:round}.dot{fill:var(--ink)}.faint{fill:var(--line)}
+.bridge{stroke:var(--cell);stroke-width:4;stroke-linecap:round}.isl{fill:var(--paper);stroke:var(--ink);stroke-width:3}
+.can{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.can div{border-radius:16px;padding:18px 20px;background:var(--soft)}
+.can ul{margin:6px 0 0;padding-left:18px}.can li{margin:4px 0;font-size:16px}
+.panel{border:2px solid var(--line);border-radius:18px;padding:20px 22px;margin-bottom:16px}
+.panel .help{font-size:15px;color:var(--mute);margin:-4px 0 12px}
+label{display:block;font-weight:600;font-size:15px;margin:12px 0 6px}
+textarea,input{width:100%;font:16px/1.45 Onest,sans-serif;color:var(--ink);background:var(--paper);border:2px solid var(--line);border-radius:12px;padding:10px 12px}
+textarea{min-height:76px;resize:vertical}
+textarea:focus,input:focus{outline:3px solid var(--sun);outline-offset:1px;border-color:var(--blue)}
+.mech{display:grid;grid-template-columns:28px minmax(0,1fr) minmax(0,1.6fr);gap:8px;align-items:center;margin-bottom:8px}
+.mech .num{font:700 15px Unbounded,sans-serif;color:var(--mute)}
+.mhead{display:grid;grid-template-columns:28px minmax(0,1fr) minmax(0,1.6fr);gap:8px;font-size:14px;color:var(--mute);margin-bottom:6px}
+.cnt{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.cnt input{width:84px;text-align:center}
+.actions{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+button{font:600 16px Onest,sans-serif;min-height:48px;border-radius:12px;border:2px solid var(--blue);background:var(--blue);color:#fff;padding:10px 20px;cursor:pointer}
+button.ghost{background:var(--paper);color:var(--ink);border-color:var(--line)}
+button:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+.msg{font-size:15px;color:var(--mute)}
+#out{display:none;margin-top:12px;min-height:160px}
+.note{font-size:15px;color:var(--mute);margin-top:10px}
+@media(max-width:700px){.plan,.can{grid-template-columns:minmax(0,1fr)}.mech,.mhead{grid-template-columns:22px minmax(0,1fr)}.mech textarea{grid-column:2}.mhead span:last-child{display:none}}
+@media(max-width:480px){.figs{grid-template-columns:minmax(0,1fr)}}
+</style>
+</head>
+<body>
+<div class="band"><div class="wrap">
+<div class="kick">Семинар «Активация и онбординг» · бриф команды 2</div>
+<h1>Ваш продукт: Мосты</h1>
+<p>Вы продуктовая команда, ваш продукт — головоломка «Мосты». В своём раунде вы проведёте онбординг для всех остальных, и после него каждый должен сам решить задание. Цель — чтобы до первого результата дошло как можно больше людей.</p>
+<a class="puz" href="./">Открыть страницу с головоломками →</a>
+</div></div>
+
+<section><div class="wrap">
+<h2>Как всё пройдёт</h2>
+<div class="plan">
+<div class="step"><div class="t">В зале · 18 мин</div><ul><li>Прочитайте правила и разберите пример ниже</li><li>Решите один вариант сами на странице с головоломками</li><li>Определите aha-момент и придумайте механики</li><li>Решите, кто показывает экран</li></ul></div>
+<div class="step"><div class="t">Ваш раунд · 4 мин</div><ul><li>Проводите онбординг для всех с демонстрацией экрана</li><li>В конце скажите участникам выбрать игру «Мосты» и свой вариант</li></ul></div>
+<div class="step"><div class="t">Ваш раунд · 7 мин</div><ul><li>Все решают, вы следите за чатом</li><li>Отвечаете на вопросы и помогаете тем, кто «Застрял»</li><li>Заполняете лист наблюдений</li></ul></div>
+</div>
+</div></section>
+
+<section><div class="wrap">
+<h2>Правила</h2>
+<ol class="rules"><li>Кружки с числами — острова. Их нужно соединить мостами.</li><li>Мост идёт только по горизонтали или вертикали, прямо от одного острова к другому.</li><li>Между двумя островами может быть один или два моста.</li><li>Мосты не пересекают друг друга и не проходят через острова.</li><li>Число на острове показывает, сколько мостов из него выходит.</li><li>В конце все острова должны быть связаны в одну сеть: от любого острова можно дойти до любого другого.</li></ol>
+<div class="tip"><b>Полезный приём</b>Начните с островов, у которых мало соседей и большое число. Например, у острова «6» в примере всего три соседа, а больше двух мостов к одному соседу не бывает. Значит, к каждому соседу идут ровно два моста.</div>
+<div class="ex"><h2>Пример</h2><div class="figs"><figure><svg viewBox="0 0 328 328" role="img"><circle cx="36" cy="36" r="2.5" class="faint"/><circle cx="100" cy="36" r="2.5" class="faint"/><circle cx="164" cy="36" r="2.5" class="faint"/><circle cx="228" cy="36" r="2.5" class="faint"/><circle cx="292" cy="36" r="2.5" class="faint"/><circle cx="36" cy="100" r="2.5" class="faint"/><circle cx="100" cy="100" r="2.5" class="faint"/><circle cx="164" cy="100" r="2.5" class="faint"/><circle cx="228" cy="100" r="2.5" class="faint"/><circle cx="292" cy="100" r="2.5" class="faint"/><circle cx="36" cy="164" r="2.5" class="faint"/><circle cx="100" cy="164" r="2.5" class="faint"/><circle cx="164" cy="164" r="2.5" class="faint"/><circle cx="228" cy="164" r="2.5" class="faint"/><circle cx="292" cy="164" r="2.5" class="faint"/><circle cx="36" cy="228" r="2.5" class="faint"/><circle cx="100" cy="228" r="2.5" class="faint"/><circle cx="164" cy="228" r="2.5" class="faint"/><circle cx="228" cy="228" r="2.5" class="faint"/><circle cx="292" cy="228" r="2.5" class="faint"/><circle cx="36" cy="292" r="2.5" class="faint"/><circle cx="100" cy="292" r="2.5" class="faint"/><circle cx="164" cy="292" r="2.5" class="faint"/><circle cx="228" cy="292" r="2.5" class="faint"/><circle cx="292" cy="292" r="2.5" class="faint"/><circle cx="100" cy="36" r="23" class="isl"/><text x="100" y="45" font-size="25" text-anchor="middle">2</text><circle cx="228" cy="36" r="23" class="isl"/><text x="228" y="45" font-size="25" text-anchor="middle">1</text><circle cx="100" cy="164" r="23" class="isl"/><text x="100" y="173" font-size="25" text-anchor="middle">6</text><circle cx="228" cy="164" r="23" class="isl"/><text x="228" y="173" font-size="25" text-anchor="middle">3</text><circle cx="100" cy="292" r="23" class="isl"/><text x="100" y="301" font-size="25" text-anchor="middle">4</text><circle cx="292" cy="292" r="23" class="isl"/><text x="292" y="301" font-size="25" text-anchor="middle">2</text></svg><figcaption>Задание 5 × 5</figcaption></figure><figure><svg viewBox="0 0 328 328" role="img"><circle cx="36" cy="36" r="2.5" class="faint"/><circle cx="100" cy="36" r="2.5" class="faint"/><circle cx="164" cy="36" r="2.5" class="faint"/><circle cx="228" cy="36" r="2.5" class="faint"/><circle cx="292" cy="36" r="2.5" class="faint"/><circle cx="36" cy="100" r="2.5" class="faint"/><circle cx="100" cy="100" r="2.5" class="faint"/><circle cx="164" cy="100" r="2.5" class="faint"/><circle cx="228" cy="100" r="2.5" class="faint"/><circle cx="292" cy="100" r="2.5" class="faint"/><circle cx="36" cy="164" r="2.5" class="faint"/><circle cx="100" cy="164" r="2.5" class="faint"/><circle cx="164" cy="164" r="2.5" class="faint"/><circle cx="228" cy="164" r="2.5" class="faint"/><circle cx="292" cy="164" r="2.5" class="faint"/><circle cx="36" cy="228" r="2.5" class="faint"/><circle cx="100" cy="228" r="2.5" class="faint"/><circle cx="164" cy="228" r="2.5" class="faint"/><circle cx="228" cy="228" r="2.5" class="faint"/><circle cx="292" cy="228" r="2.5" class="faint"/><circle cx="36" cy="292" r="2.5" class="faint"/><circle cx="100" cy="292" r="2.5" class="faint"/><circle cx="164" cy="292" r="2.5" class="faint"/><circle cx="228" cy="292" r="2.5" class="faint"/><circle cx="292" cy="292" r="2.5" class="faint"/><line x1="100" y1="159" x2="228" y2="159" class="bridge"/><line x1="100" y1="169" x2="228" y2="169" class="bridge"/><line x1="95" y1="164" x2="95" y2="292" class="bridge"/><line x1="105" y1="164" x2="105" y2="292" class="bridge"/><line x1="228" y1="36" x2="228" y2="164" class="bridge"/><line x1="95" y1="36" x2="95" y2="164" class="bridge"/><line x1="105" y1="36" x2="105" y2="164" class="bridge"/><line x1="100" y1="287" x2="292" y2="287" class="bridge"/><line x1="100" y1="297" x2="292" y2="297" class="bridge"/><circle cx="100" cy="36" r="23" class="isl"/><text x="100" y="45" font-size="25" text-anchor="middle">2</text><circle cx="228" cy="36" r="23" class="isl"/><text x="228" y="45" font-size="25" text-anchor="middle">1</text><circle cx="100" cy="164" r="23" class="isl"/><text x="100" y="173" font-size="25" text-anchor="middle">6</text><circle cx="228" cy="164" r="23" class="isl"/><text x="228" y="173" font-size="25" text-anchor="middle">3</text><circle cx="100" cy="292" r="23" class="isl"/><text x="100" y="301" font-size="25" text-anchor="middle">4</text><circle cx="292" cy="292" r="23" class="isl"/><text x="292" y="301" font-size="25" text-anchor="middle">2</text></svg><figcaption>Решение</figcaption></figure></div></div>
+</div></section>
+
+<section><div class="wrap">
+<h2>Что можно в онбординге</h2>
+<div class="can">
+<div><h3>Можно</h3><ul><li>Демонстрация экрана, доска Zoom</li><li>Свой мини-пример или тестовый уровень</li><li>Подсказки и ответы в чат</li><li>Подсказать первые шаги для каждого варианта</li></ul></div>
+<div><h3>Нельзя</h3><ul><li>Показывать полное решение варианта</li><li>Выходить за 4 минуты</li></ul><p class="note">На странице с головоломками правил нет. Участники узнают их только от вас.</p></div>
+</div>
+</div></section>
+
+<section><div class="wrap">
+<h2>Ваш онбординг и наблюдения</h2>
+<p class="note" style="margin:-6px 0 18px">Заполняет один человек из команды. Ответы сохраняются только в этом браузере. На разборе нажмите «Скопировать ответы» и вставьте их в чат Zoom.</p>
+<div class="panel">
+<h3>Наш aha-момент</h3>
+<p class="help">Конкретный момент, по которому вы поймёте, что у участника получилось. Не «участник понял игру», а то, что можно заметить: сообщение в чате, ход на поле, вопрос.</p>
+<textarea id="aha" aria-label="Наш aha-момент"></textarea>
+</div>
+<div class="panel">
+<h3>Механики</h3>
+<div class="mhead"><span></span><span>Механика</span><span>Как она работает</span></div>
+<div id="mech"></div>
+</div>
+<div class="panel">
+<h3>Лист наблюдений</h3>
+<label>Сколько человек дошли до первого результата</label>
+<div class="cnt"><input id="ok" inputmode="numeric" aria-label="Решили"><span>из</span><input id="all" inputmode="numeric" aria-label="Всего решали"></div>
+<label for="stuck">Где застревали</label><textarea id="stuck"></textarea>
+<label for="qs">Какие вопросы задавали</label><textarea id="qs"></textarea>
+<label for="good">Что сработало хорошо</label><textarea id="good"></textarea>
+<label for="better">Что улучшить в онбординге</label><textarea id="better"></textarea>
+</div>
+<div class="actions"><button id="copy">Скопировать ответы</button><span class="msg" id="msg"></span></div>
+<textarea id="out" readonly aria-label="Текст для чата"></textarea>
+</div></section>
+
+<script>
+{
+const K='brief2';const $=s=>document.querySelector(s);
+$('#mech').innerHTML=[1,2,3,4,5].map(i=>`<div class="mech"><span class="num">${i}</span><input id="m${i}" aria-label="Механика ${i}"><textarea id="w${i}" aria-label="Как работает механика ${i}" style="min-height:48px"></textarea></div>`).join('');
+const ids=['aha','ok','all','stuck','qs','good','better',...[1,2,3,4,5].flatMap(i=>['m'+i,'w'+i])];
+let data={};try{data=JSON.parse(localStorage.getItem(K))||{}}catch(e){}
+ids.forEach(id=>{const el=$('#'+id);el.value=data[id]||'';el.addEventListener('input',()=>{data[id]=el.value;try{localStorage.setItem(K,JSON.stringify(data))}catch(e){}})});
+$('#copy').addEventListener('click',()=>{
+  const v=id=>($('#'+id).value||'').trim()||'—';
+  const mech=[1,2,3,4,5].filter(i=>$('#m'+i).value.trim()||$('#w'+i).value.trim()).map((i,k)=>`${k+1}. ${v('m'+i)}: ${v('w'+i)}`).join('\n')||'—';
+  const t=`Команда 2 · Мосты\nAha-момент: ${v('aha')}\nМеханики:\n${mech}\nДошли до результата: ${v('ok')} из ${v('all')}\nГде застревали: ${v('stuck')}\nВопросы: ${v('qs')}\nЧто сработало: ${v('good')}\nЧто улучшить: ${v('better')}`;
+  const fail=()=>{$('#msg').textContent='Скопируйте текст ниже вручную';$('#out').value=t;$('#out').style.display='block';$('#out').select()};
+  try{navigator.clipboard.writeText(t).then(()=>{$('#msg').textContent='Скопировано. Вставьте в чат Zoom';$('#out').style.display='none'},fail)}catch(e){fail()}
+});
+}
+</script>
+</body>
+</html>

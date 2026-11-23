@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Головоломки семинара</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=Unbounded:wght@500;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE everyday: a calm puzzle table for students in a Zoom seminar
+   IDEA a page from a puzzle book: grid paper board, big clear marks
+   PICTURE the board itself, large, with a quiet side panel for time and actions
+   COLOUR white paper, ink #0e1726, seminar blue #1b7cff header band, sun yellow only for the win
+   TYPE Unbounded for numbers and titles, Onest for text
+   LAYOUT blue band with game tabs and variant chips; board left, panel right; stacked on phones */
+:root{color-scheme:light dark;
+--bg:light-dark(#ffffff,#0c1320);--ink:light-dark(#0e1726,#eef3fb);--mute:light-dark(#566274,#9eabbd);
+--line:light-dark(#c9d3e1,#2c3a52);--soft:light-dark(#eef4ff,#14223a);--paper:light-dark(#ffffff,#111b2c);
+--cell:light-dark(#1b7cff,#4b98ff);--blue:#1b7cff;--sun:#ffd23f;--red:#ff5a4e;--green:#1fb26b}
+:root[data-theme=light]{color-scheme:light}
+:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.5 Onest,system-ui,sans-serif;overflow-x:clip}
+h1,.num{font-family:Unbounded,Onest,sans-serif;letter-spacing:-.02em}
+.band{background:var(--blue);color:#fff;padding:22px max(4vw,16px) 20px}
+.top{max-width:1240px;margin:0 auto;display:flex;flex-wrap:wrap;gap:14px 28px;align-items:center;justify-content:space-between}
+h1{font-size:clamp(22px,3vw,32px);margin:0;line-height:1.1}
+.tabs{display:flex;gap:8px;flex-wrap:wrap}
+.tab{font:600 16px Onest,sans-serif;min-height:44px;padding:8px 18px;border-radius:12px;border:2px solid rgba(255,255,255,.45);background:transparent;color:#fff;cursor:pointer}
+.tab[aria-pressed=true]{background:#fff;color:#0e1726;border-color:#fff}
+.vars{max-width:1240px;margin:16px auto 0;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.vars span{font-weight:600;margin-right:6px}
+.v{font:700 16px Unbounded,sans-serif;width:44px;height:44px;border-radius:10px;border:2px solid rgba(255,255,255,.45);background:transparent;color:#fff;cursor:pointer}
+.v[aria-pressed=true]{background:var(--sun);border-color:var(--sun);color:#0e1726}
+.v.done::after{content:"✓";font-size:10px;position:relative;top:-12px;left:1px}
+main{max-width:1240px;margin:0 auto;padding:24px max(4vw,16px) 48px;display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:32px;align-items:start}
+.boardwrap{background:var(--paper);border:2px solid var(--line);border-radius:20px;padding:clamp(12px,2.5vw,28px);display:grid;place-items:center;min-height:420px;position:relative}
+#board{width:100%;max-width:640px;touch-action:none;user-select:none;-webkit-user-select:none}
+#board svg{display:block;width:100%;height:auto;max-height:calc(100svh - 230px);margin:0 auto}
+.empty{text-align:center;color:var(--mute);font-size:18px;max-width:360px}
+.empty b{display:block;color:var(--ink);font:700 24px/1.2 Unbounded,sans-serif;margin-bottom:10px}
+aside{display:grid;gap:16px;position:sticky;top:16px}
+.panel{background:var(--soft);border-radius:18px;padding:20px 22px}
+.lab{font-size:14px;color:var(--mute)}
+.time{font:700 56px/1 Unbounded,sans-serif;font-variant-numeric:tabular-nums;margin:6px 0 2px}
+.game{font-weight:600;font-size:18px}
+.hint{font-size:15px;line-height:1.45;color:var(--ink)}
+.btns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+button.b{font:600 16px Onest,sans-serif;min-height:48px;border-radius:12px;border:2px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer;padding:8px 12px}
+button.b:hover{border-color:var(--blue)}
+button.sos{grid-column:1/-1;border-color:var(--red);color:var(--red)}
+button.main{background:var(--blue);border-color:var(--blue);color:#fff;width:100%}
+button:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+.msg{font-size:14px;color:var(--mute);min-height:20px}
+.copybox{width:100%;font:15px Onest,sans-serif;padding:10px 12px;border-radius:10px;border:2px solid var(--line);background:var(--paper);color:var(--ink);margin-top:8px;display:none}
+.win{background:var(--sun);color:#0e1726;border-radius:18px;padding:22px;display:none}
+.win.show{display:block;animation:pop .45s cubic-bezier(.3,1.5,.5,1)}
+.win .num{font-size:44px;font-weight:700;line-height:1;margin:6px 0 14px}
+.win .b{background:#0e1726;color:#fff;border-color:#0e1726;width:100%}
+.win .msg{color:#3a3a1a}
+@keyframes pop{from{transform:scale(.9);opacity:0}to{transform:none;opacity:1}}
+.solved .boardwrap{border-color:var(--sun)}
+.shake{animation:shake .3s}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+svg text{font-family:Unbounded,Onest,sans-serif;font-weight:700;pointer-events:none}
+.hit{fill:transparent;cursor:pointer}
+.isl{cursor:pointer}
+@media(max-width:860px){main{grid-template-columns:minmax(0,1fr)}aside{position:static;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.win,.panel.wide{grid-column:1/-1}}
+@media(max-width:520px){aside{grid-template-columns:minmax(0,1fr)}.time{font-size:44px}.v{width:40px;height:40px}}
+@media(prefers-reduced-motion:reduce){.win.show,.shake{animation:none}}
+</style>
+</head>
+<body>
+<div class="band">
+<div class="top"><h1>Головоломки семинара</h1><div class="tabs" id="tabs"></div></div>
+<div class="vars" id="vars"><span>Ваш вариант:</span></div>
+</div>
+<main id="main">
+<div class="boardwrap"><div id="board"></div></div>
+<aside>
+<div class="panel"><div class="lab">Время</div><div class="time" id="time">0:00</div><div class="game" id="gname">Выберите игру и вариант</div></div>
+<div class="win" id="win"><div class="lab" style="color:#3a3a1a">Готово!</div><div class="num" id="wtime">0:00</div><button class="b" id="copyOk">Скопировать в чат</button><div class="msg" id="okMsg"></div><input class="copybox" id="okBox" readonly></div>
+<div class="panel wide"><div class="lab" style="margin-bottom:6px">Управление</div><div class="hint" id="hint">Сначала выберите игру сверху, потом свой номер варианта.</div></div>
+<div class="btns"><button class="b" id="undo">Отменить ход</button><button class="b" id="reset">Очистить поле</button><button class="b sos" id="sos">Застрял: скопировать в чат</button></div>
+<div class="msg" id="sosMsg"></div><input class="copybox" id="sosBox" readonly>
+</aside>
+</main>
+<script>
+{
+const DATA={"nono":[{"r":[[1,1],[4],[4],[2],[4,1],[4,2],[6,1],[6,1],[6,1],[7]],"c":[[3],[3,6],[9],[9],[3,6],[4],[1],[5],[2]]},{"r":[[1,1],[3,2],[5,2],[1,3,2],[6],[6]],"c":[[2,1],[2,2],[5],[5],[4],[1,2],[4],[3],[1]]},{"r":[[3],[1,1],[5],[6],[1,2],[1,2],[6],[1],[2]],"c":[[1],[1],[7],[1,2,1,1],[4,3],[1,1],[1,1],[4],[2]]},{"r":[[1,1],[2],[8],[2,3],[2,1,1],[2,3],[2,1,1],[10],[8]],"c":[[5],[7],[1,1,2],[2,2],[2,2],[1,1,2],[1,2],[7],[2,1,2],[5]]},{"r":[[2,2],[2,2],[2,2],[2,2],[2,4,2],[6],[8],[8],[2,2]],"c":[[2],[2,2],[3,4],[3,5],[4],[4],[3,5],[3,4],[2,2],[2]]},{"r":[[3],[2,2],[5],[5],[4],[3],[1],[2]],"c":[[3],[5],[8],[1,4,1],[4],[1]]},{"r":[[3],[5],[2,2],[5],[3],[1],[1,2],[4],[3],[1]],"c":[[3],[5],[2,7],[5,2],[3,3],[2]]},{"r":[[2],[1],[3,2],[1,5],[1,6],[8],[6],[2,1]],"c":[[3],[1,2],[1,4],[1,6],[2,4],[6],[5],[3]]},{"r":[[1,1],[5],[1,1,1],[5,2],[3,1],[5,1],[5,1],[5,1],[5,1],[7]],"c":[[4,5],[1,7],[9],[1,7],[4,5],[1],[7],[1]]},{"r":[[1],[2],[3],[1,2],[1,2],[1,1],[3],[4],[2]],"c":[[1],[3],[3],[8],[2],[3],[3]]},{"r":[[2,1],[2,1],[4,1,1],[3,1],[5,1],[1,3,2],[6],[1,3],[1,1]],"c":[[1,1,1],[3,1],[8],[1,5],[1,6],[1,1,2],[3],[4],[1]]},{"r":[[1,1],[2,2],[5],[5],[3],[5],[5],[5],[1,5],[6]],"c":[[1],[1],[1],[4,5],[9],[8],[9],[4,4]]},{"r":[[2,2],[1,1,1,1],[1,1,1,1],[7],[1,1,1],[5],[5],[3],[1]],"c":[[2],[1,1],[1,4],[3,3],[6],[3,3],[1,4],[1,1],[2]]},{"r":[[1],[5],[7],[9],[1,1,1,1,1],[1],[1],[1,1],[1]],"c":[[2],[2],[4,1],[3,1],[8],[3],[4],[2],[2]]}],"slither":[["13112","..101",".3111","0...3","0...1"],[".1000","13...","..221","2..12","2111."],["12320","..03.",".0..0","..0.1","21220"],[".3210","1..22","2.0.3","2.1.2","2.2.0"],[".112.",".31.1",".21..","0.22.","01310"],[".00..","3210.","11..0",".00.2",".1113"],["31100","23320",".1..1","..1..","212.."],["1221.","32..1","12102","....2","0..10"],["..210","3.120","20..2",".1103","11..."],["32.10","1112.",".0.21","21.2.",".3.0."],["0..23","00221",".1...",".12.1","00.23"],["...22","101..",".2322","110..","000.0"],["..2..",".2.31","120..","02201","002.2"],["22..1","31.11",".2.21","...1.","00000"]],"hashi":[[".......","2.3.4.3",".....1.","....2..",".......","1.2..2.","...1..3"],[".2..3.1","...1...","2......",".2.2...",".......","3...2..","......."],["3..5..3","..1..1.",".......","..2....","...2.2.","1.2...2","......."],[".1...2.",".......","3.3..3.",".3.1...","2......",".4...3.","1......"],[".......","...1.2.",".3..2..",".......","...2.2.",".......",".2.3..1"],["3..4.2.",".......","4...2.1",".......","4....4.",".......","..1..3."],[".......",".2....2",".......",".3...1.","...1..3",".2..1..","...1..2"],[".......","...2..3",".......","1..6.4.","......2","2..4.2.","......."],[".3.2.3.",".......","2......",".3...5.",".......","3.2..3.","......."],[".......","2.5.2.1",".......","2.4..2.",".......","...2.3.","2...1.."],["1......",".2..3.1",".......","2...3..",".2.1...",".......",".2..3.2"],["......1","2.6..3.",".......","...1.2.","3.5...2",".......","1......"],["..3..2.",".......","1.6.3..",".......","..2..1.","1...3..","......."],["2.1....","...2.2.",".......","...2.3.",".......","2..4.4.","......."]]};
+const GAMES=[['nono','Нонограммы'],['hashi','Мосты'],['slither','Слизерлинк']];
+const HINTS={nono:'Нажмите на клетку, чтобы закрасить её. Ещё раз — поставить крестик. Ещё раз — очистить. Можно провести мышью или пальцем по нескольким клеткам. Правая кнопка мыши сразу ставит крестик.',
+hashi:'Нажмите на один остров, потом на другой — между ними появится мост. Можно просто провести от острова к острову. Нажатие на мост меняет его.',
+slither:'Нажмите между двумя соседними точками, чтобы провести линию. Ещё раз — поставить крестик. Ещё раз — очистить.'};
+const $=s=>document.querySelector(s);
+const store={get(k){try{return JSON.parse(localStorage.getItem('pz:'+k))}catch(e){return null}},set(k,v){try{localStorage.setItem('pz:'+k,JSON.stringify(v))}catch(e){}}};
+let game=store.get('game'),vn=store.get('var'),st=null,hist=[],start=0,solvedAt=null,key='';
+const fmt=s=>{s=Math.max(0,Math.floor(s));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')};
+const NS='http://www.w3.org/2000/svg';
+
+/* ---------- UI chrome ---------- */
+$('#tabs').innerHTML=GAMES.map(([k,n])=>`<button class="tab" data-g="${k}" aria-pressed="false">${n}</button>`).join('');
+$('#vars').insertAdjacentHTML('beforeend',Array.from({length:14},(_,i)=>`<button class="v" data-v="${i+1}" aria-pressed="false" aria-label="Вариант ${i+1}">${i+1}</button>`).join(''));
+$('#tabs').addEventListener('click',e=>{const b=e.target.closest('[data-g]');if(b){game=b.dataset.g;store.set('game',game);open()}});
+$('#vars').addEventListener('click',e=>{const b=e.target.closest('[data-v]');if(b){vn=+b.dataset.v;store.set('var',vn);open()}});
+function chrome(){
+  document.querySelectorAll('.tab').forEach(b=>b.setAttribute('aria-pressed',b.dataset.g===game));
+  document.querySelectorAll('.v').forEach(b=>{b.setAttribute('aria-pressed',+b.dataset.v===vn);b.classList.toggle('done',!!(game&&store.get(game+':'+b.dataset.v+':solved')))});
+}
+const gname=()=>GAMES.find(g=>g[0]===game)[1];
+
+/* ---------- open a puzzle ---------- */
+function open(){
+  chrome();
+  if(!game||!vn){$('#board').innerHTML=`<div class="empty"><b>${!game?'Выберите игру':'Выберите свой вариант'}</b>${!game?'Вкладки вверху справа: ту, которую сейчас объясняет команда.':'Номер, который вам прислали в чат.'}</div>`;$('#hint').textContent='Сначала выберите игру сверху, потом свой номер варианта.';$('#gname').textContent='Выберите игру и вариант';$('#time').textContent='0:00';$('#win').classList.remove('show');return}
+  key=game+':'+vn;
+  start=store.get(key+':start');if(!start){start=Date.now();store.set(key+':start',start)}
+  solvedAt=store.get(key+':solved');
+  st=store.get(key+':state')||blank();hist=[];
+  $('#gname').textContent=gname()+' · вариант '+vn;$('#hint').textContent=HINTS[game];
+  $('#sosMsg').textContent='';$('#sosBox').style.display='none';$('#okMsg').textContent='';$('#okBox').style.display='none';
+  draw();showWin(false);tick();
+}
+function blank(){
+  if(game==='nono'){const p=DATA.nono[vn-1];return p.r.map(()=>p.c.map(()=>0))}
+  if(game==='slither'){const n=DATA.slither[vn-1].length;return {h:Array.from({length:n+1},()=>Array(n).fill(0)),v:Array.from({length:n},()=>Array(n+1).fill(0))}}
+  return {}; // hashi: "r,c|r,c" -> count
+}
+const save=()=>store.set(key+':state',st);
+const push=()=>{hist.push(JSON.stringify(st));if(hist.length>200)hist.shift()};
+$('#undo').addEventListener('click',()=>{if(!hist.length||solvedAt)return;st=JSON.parse(hist.pop());save();draw()});
+let rt=null;$('#reset').addEventListener('click',e=>{if(!game||!vn||solvedAt)return;const b=e.currentTarget;if(!rt){b.textContent='Точно очистить?';rt=setTimeout(()=>{b.textContent='Очистить поле';rt=null},3000);return}clearTimeout(rt);rt=null;b.textContent='Очистить поле';push();st=blank();save();draw()});
+
+/* ---------- timer ---------- */
+function tick(){if(!game||!vn)return;$('#time').textContent=fmt(((solvedAt||Date.now())-start)/1000)}
+setInterval(tick,500);
+
+/* ---------- copy to chat ---------- */
+function copy(text,msgEl,boxEl){
+  const done=()=>{msgEl.textContent='Скопировано. Вставьте в чат Zoom: Ctrl+V или ⌘V';boxEl.style.display='none'};
+  const fail=()=>{msgEl.textContent='Скопируйте текст ниже и вставьте в чат Zoom';boxEl.value=text;boxEl.style.display='block';boxEl.select()};
+  try{navigator.clipboard.writeText(text).then(done,fail)}catch(e){fail()}
+}
+$('#sos').addEventListener('click',()=>{if(!game||!vn){$('#sosMsg').textContent='Сначала выберите игру и вариант';return}copy(`🆘 Застрял | ${gname()} | вариант ${vn} | ${fmt((Date.now()-start)/1000)}`,$('#sosMsg'),$('#sosBox'))});
+$('#copyOk').addEventListener('click',()=>copy(`✅ Решено | ${gname()} | вариант ${vn} | ${fmt((solvedAt-start)/1000)}`,$('#okMsg'),$('#okBox')));
+function showWin(anim){
+  const w=$('#win');document.body.classList.toggle('solved',!!solvedAt);
+  if(!solvedAt){w.classList.remove('show');return}
+  $('#wtime').textContent='за '+fmt((solvedAt-start)/1000);
+  w.classList.remove('show');if(anim)void w.offsetWidth;w.classList.add('show');
+}
+function after(){save();draw();if(!solvedAt&&check()){solvedAt=Date.now();store.set(key+':solved',solvedAt);showWin(true);chrome();tick()}}
+
+/* ---------- drawing ---------- */
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function draw(){({nono:drawNono,slither:drawSl,hashi:drawHashi})[game]()}
+function check(){return ({nono:chkNono,slither:chkSl,hashi:chkHashi})[game]()}
+
+/* nonogram */
+let paint=null;
+function drawNono(){
+  const p=DATA.nono[vn-1],R=p.r.length,C=p.c.length,cs=44;
+  const mr=Math.max(...p.r.map(x=>x.length)),mc=Math.max(...p.c.map(x=>x.length));
+  const lw=mr*cs*.6+10,th=mc*cs*.62+8,W=lw+C*cs+2,H=th+R*cs+2;
+  let s=`<svg viewBox="0 0 ${W} ${H}" id="sv">`;
+  p.r.forEach((r,i)=>r.forEach((v,k)=>s+=`<text x="${lw-10-(r.length-1-k)*cs*.6}" y="${th+i*cs+cs*.66}" font-size="19" text-anchor="end" fill="var(--ink)">${v}</text>`));
+  p.c.forEach((c,j)=>c.forEach((v,k)=>s+=`<text x="${lw+j*cs+cs/2}" y="${th-10-(c.length-1-k)*cs*.62}" font-size="19" text-anchor="middle" fill="var(--ink)">${v}</text>`));
+  for(let i=0;i<R;i++)for(let j=0;j<C;j++){const x=lw+j*cs,y=th+i*cs,v=st[i][j];
+    s+=`<rect class="hit" data-i="${i}" data-j="${j}" x="${x}" y="${y}" width="${cs}" height="${cs}"/>`;
+    if(v===1)s+=`<rect x="${x+2}" y="${y+2}" width="${cs-4}" height="${cs-4}" rx="4" fill="var(--cell)" pointer-events="none"/>`;
+    if(v===2)s+=`<path d="M${x+15} ${y+15}L${x+cs-15} ${y+cs-15}M${x+cs-15} ${y+15}L${x+15} ${y+cs-15}" stroke="var(--mute)" stroke-width="3" stroke-linecap="round" pointer-events="none"/>`}
+  for(let i=0;i<=R;i++)s+=`<line x1="${lw}" x2="${lw+C*cs}" y1="${th+i*cs}" y2="${th+i*cs}" stroke="var(--line)" stroke-width="${i%5&&i!==R?1:3}" pointer-events="none"/>`;
+  for(let j=0;j<=C;j++)s+=`<line y1="${th}" y2="${th+R*cs}" x1="${lw+j*cs}" x2="${lw+j*cs}" stroke="var(--line)" stroke-width="${j%5&&j!==C?1:3}" pointer-events="none"/>`;
+  $('#board').innerHTML=s+'</svg>';
+}
+const cellAt=e=>{const el=document.elementFromPoint(e.clientX,e.clientY);return el&&el.dataset&&el.dataset.i!=null&&game==='nono'?[+el.dataset.i,+el.dataset.j]:null};
+$('#board').addEventListener('contextmenu',e=>{if(game==='nono'||game==='slither')e.preventDefault()});
+$('#board').addEventListener('pointerdown',e=>{
+  if(!game||!vn||solvedAt)return;
+  if(game==='nono'){const c=cellAt(e);if(!c)return;push();const cur=st[c[0]][c[1]];const to=e.button===2?(cur===2?0:2):(cur+1)%3;paint=to;st[c[0]][c[1]]=to;after();e.preventDefault()}
+  else if(game==='slither')slDown(e);
+  else hDown(e);
+});
+addEventListener('pointermove',e=>{if(game==='nono'&&paint!=null&&!solvedAt){const c=cellAt(e);if(c&&st[c[0]][c[1]]!==paint){st[c[0]][c[1]]=paint;after()}}});
+addEventListener('pointerup',e=>{if(paint!=null){paint=null}if(game==='hashi')hUp(e)});
+const runs=a=>{const r=[];let c=0;for(const v of a){if(v===1)c++;else if(c){r.push(c);c=0}}if(c)r.push(c);return r};
+const eq=(a,b)=>a.length===b.length&&a.every((x,i)=>x===b[i]);
+function chkNono(){const p=DATA.nono[vn-1];return p.r.every((r,i)=>eq(runs(st[i]),r))&&p.c.every((c,j)=>eq(runs(st.map(row=>row[j])),c))}
+
+/* slitherlink */
+function drawSl(){
+  const cl=DATA.slither[vn-1],n=cl.length,P=80,o=30,W=o*2+n*P;
+  let s=`<svg viewBox="0 0 ${W} ${W}" id="sv">`;
+  for(let r=0;r<n;r++)for(let c=0;c<n;c++){const ch=cl[r][c];if(ch!=='.')s+=`<text x="${o+c*P+P/2}" y="${o+r*P+P/2+12}" font-size="34" text-anchor="middle" fill="var(--ink)">${ch}</text>`}
+  const edge=(x1,y1,x2,y2,v,t,r,c)=>{let q='';
+    if(v===1)q+=`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="var(--cell)" stroke-width="8" stroke-linecap="round"/>`;
+    if(v===2){const mx=(x1+x2)/2,my=(y1+y2)/2;q+=`<path d="M${mx-7} ${my-7}L${mx+7} ${my+7}M${mx+7} ${my-7}L${mx-7} ${my+7}" stroke="var(--mute)" stroke-width="3" stroke-linecap="round"/>`}
+    const hx=Math.min(x1,x2)-(t==='v'?20:-8),hy=Math.min(y1,y2)-(t==='h'?20:-8);
+    q+=`<rect class="hit" data-t="${t}" data-r="${r}" data-c="${c}" x="${hx}" y="${hy}" width="${t==='h'?P-16:40}" height="${t==='h'?40:P-16}"/>`;return q};
+  for(let r=0;r<=n;r++)for(let c=0;c<n;c++)s+=edge(o+c*P,o+r*P,o+(c+1)*P,o+r*P,st.h[r][c],'h',r,c);
+  for(let r=0;r<n;r++)for(let c=0;c<=n;c++)s+=edge(o+c*P,o+r*P,o+c*P,o+(r+1)*P,st.v[r][c],'v',r,c);
+  for(let r=0;r<=n;r++)for(let c=0;c<=n;c++)s+=`<circle cx="${o+c*P}" cy="${o+r*P}" r="6" fill="var(--ink)" pointer-events="none"/>`;
+  $('#board').innerHTML=s+'</svg>';
+}
+function slDown(e){const el=e.target.closest('[data-t]');if(!el)return;push();const a=st[el.dataset.t][+el.dataset.r],c=+el.dataset.c;a[c]=e.button===2?(a[c]===2?0:2):(a[c]+1)%3;after();e.preventDefault()}
+function chkSl(){
+  const cl=DATA.slither[vn-1],n=cl.length,on=(a)=>a===1;
+  for(let r=0;r<n;r++)for(let c=0;c<n;c++){const ch=cl[r][c];if(ch==='.')continue;const k=on(st.h[r][c])+on(st.h[r+1][c])+on(st.v[r][c])+on(st.v[r][c+1]);if(k!==+ch)return false}
+  const deg={},adj={},add=(a,b)=>{deg[a]=(deg[a]||0)+1;deg[b]=(deg[b]||0)+1;(adj[a]=adj[a]||[]).push(b);(adj[b]=adj[b]||[]).push(a)};
+  let E=0;for(let r=0;r<=n;r++)for(let c=0;c<n;c++)if(on(st.h[r][c])){add(r+','+c,r+','+(c+1));E++}
+  for(let r=0;r<n;r++)for(let c=0;c<=n;c++)if(on(st.v[r][c])){add(r+','+c,(r+1)+','+c);E++}
+  const ks=Object.keys(deg);if(!ks.length||ks.some(k=>deg[k]!==2))return false;
+  const seen=new Set([ks[0]]),stack=[ks[0]];while(stack.length){for(const y of adj[stack.pop()])if(!seen.has(y)){seen.add(y);stack.push(y)}}
+  return seen.size===ks.length;
+}
+
+/* hashi */
+let hSel=null,hFrom=null;
+function islands(){const g=DATA.hashi[vn-1],I=[];g.forEach((row,r)=>[...row].forEach((ch,c)=>{if(ch!=='.')I.push({r,c,n:+ch})}));return I}
+const hk=(a,b)=>{const x=a.r+','+a.c,y=b.r+','+b.c;return x<y?x+'|'+y:y+'|'+x};
+const hp=k=>k.split('|').map(s=>s.split(',').map(Number));
+function between(a,b,I){if(a.r===b.r){const lo=Math.min(a.c,b.c),hi=Math.max(a.c,b.c);return I.some(x=>x.r===a.r&&x.c>lo&&x.c<hi)}if(a.c===b.c){const lo=Math.min(a.r,b.r),hi=Math.max(a.r,b.r);return I.some(x=>x.c===a.c&&x.r>lo&&x.r<hi)}return true}
+function crosses(k){const[[r1,c1],[r2,c2]]=hp(k);return Object.keys(st).some(o=>{if(o===k||!st[o])return false;const[[s1,d1],[s2,d2]]=hp(o);
+  if(r1===r2&&d1===d2)return d1>Math.min(c1,c2)&&d1<Math.max(c1,c2)&&r1>Math.min(s1,s2)&&r1<Math.max(s1,s2);
+  if(c1===c2&&s1===s2)return s1>Math.min(r1,r2)&&s1<Math.max(r1,r2)&&c1>Math.min(d1,d2)&&c1<Math.max(d1,d2);return false})}
+function connect(a,b){const I=islands();if(a.r!==b.r&&a.c!==b.c||between(a,b,I)){bump();return}const k=hk(a,b);const nx=((st[k]||0)+1)%3;if(nx&&!st[k]&&crosses(k)){bump();return}push();if(nx)st[k]=nx;else delete st[k];after()}
+const bump=()=>{const b=$('#board');b.classList.remove('shake');void b.offsetWidth;b.classList.add('shake')};
+const P=72,O=44;const X=c=>O+c*P,Y=r=>O+r*P;
+function drawHashi(){
+  const g=DATA.hashi[vn-1],n=g.length,W=O*2+(n-1)*P,I=islands();
+  let s=`<svg viewBox="0 0 ${W} ${W}" id="sv">`;
+  for(let r=0;r<n;r++)for(let c=0;c<n;c++)s+=`<circle cx="${X(c)}" cy="${Y(r)}" r="2.5" fill="var(--line)"/>`;
+  for(const k in st){const v=st[k];if(!v)continue;const[[r1,c1],[r2,c2]]=hp(k),hz=r1===r2;
+    const off=v===2?[-6,6]:[0];off.forEach(d=>s+=`<line x1="${X(c1)+(hz?0:d)}" y1="${Y(r1)+(hz?d:0)}" x2="${X(c2)+(hz?0:d)}" y2="${Y(r2)+(hz?d:0)}" stroke="var(--cell)" stroke-width="5" stroke-linecap="round"/>`);
+    s+=`<line class="hit" data-k="${k}" x1="${X(c1)}" y1="${Y(r1)}" x2="${X(c2)}" y2="${Y(r2)}" stroke="transparent" stroke-width="28" style="cursor:pointer"/>`}
+  I.forEach(x=>{const sel=hSel&&hSel.r===x.r&&hSel.c===x.c;
+    s+=`<g class="isl" data-r="${x.r}" data-c="${x.c}"><circle cx="${X(x.c)}" cy="${Y(x.r)}" r="26" fill="${sel?'var(--sun)':'var(--paper)'}" stroke="var(--ink)" stroke-width="3"/><text x="${X(x.c)}" y="${Y(x.r)+10}" font-size="28" text-anchor="middle" fill="${sel?'#0e1726':'var(--ink)'}">${x.n}</text></g>`});
+  $('#board').innerHTML=s+'</svg>';
+}
+const islAt=e=>{const el=document.elementFromPoint(e.clientX,e.clientY);const g=el&&el.closest&&el.closest('.isl');return g?{r:+g.dataset.r,c:+g.dataset.c}:null};
+function hDown(e){
+  const i=islAt(e);
+  if(i){if(hSel&&(hSel.r!==i.r||hSel.c!==i.c)){const a=hSel;hSel=null;hFrom=null;connect(a,i);draw();return}hSel=i;hFrom=i;draw();e.preventDefault();return}
+  const ln=e.target.closest&&e.target.closest('[data-k]');
+  if(ln){const k=ln.dataset.k;push();const nx=(st[k]+1)%3;if(nx)st[k]=nx;else delete st[k];hSel=null;after();return}
+  hSel=null;draw();
+}
+function hUp(e){if(!hFrom||solvedAt)return;const i=islAt(e);const a=hFrom;hFrom=null;if(i&&(i.r!==a.r||i.c!==a.c)){hSel=null;connect(a,i);draw()}}
+function chkHashi(){
+  const I=islands(),cnt={},adj={};
+  for(const k in st){if(!st[k])continue;const[[a,b],[c,d]]=hp(k),x=a+','+b,y=c+','+d;cnt[x]=(cnt[x]||0)+st[k];cnt[y]=(cnt[y]||0)+st[k];(adj[x]=adj[x]||[]).push(y);(adj[y]=adj[y]||[]).push(x)}
+  if(I.some(x=>(cnt[x.r+','+x.c]||0)!==x.n))return false;
+  const s0=I[0].r+','+I[0].c,seen=new Set([s0]),stack=[s0];while(stack.length){for(const y of adj[stack.pop()]||[])if(!seen.has(y)){seen.add(y);stack.push(y)}}
+  return seen.size===I.length;
+}
+
+if(game&&!GAMES.some(g=>g[0]===game))game=null;
+if(vn&&!(vn>=1&&vn<=14))vn=null;
+open();
+}
+</script>
+</body>
+</html>
