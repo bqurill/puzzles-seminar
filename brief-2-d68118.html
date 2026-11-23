@@ -92,9 +92,9 @@ button:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
 <section><div class="wrap">
 <h2>Как всё пройдёт</h2>
 <div class="plan">
-<div class="step"><div class="t">В зале · 18 мин</div><ul><li>Прочитайте правила и разберите пример ниже</li><li>Решите один вариант сами на странице с головоломками</li><li>Определите aha-момент и придумайте механики</li><li>Решите, кто показывает экран</li></ul></div>
-<div class="step"><div class="t">Ваш раунд · 4 мин</div><ul><li>Проводите онбординг для всех с демонстрацией экрана</li><li>В конце скажите участникам выбрать игру «Мосты» и свой вариант</li></ul></div>
-<div class="step"><div class="t">Ваш раунд · 7 мин</div><ul><li>Все решают, вы следите за чатом</li><li>Отвечаете на вопросы и помогаете тем, кто «Застрял»</li><li>Заполняете лист наблюдений</li></ul></div>
+<div class="step"><div class="t">В зале · 18 мин</div><ul><li>Прочитайте правила и разберите пример ниже</li><li>Решите один вариант сами на странице с головоломками (любой номер; ваша тренировка в результаты не попадёт)</li><li>Определите aha-момент и придумайте механики</li><li>Решите, кто показывает экран и объясняет, а кто заполняет этот бриф и следит за чатом</li></ul></div>
+<div class="step"><div class="t">Ваш раунд · 4 мин</div><ul><li>Проводите онбординг для всех с демонстрацией экрана</li><li>В конце скажите: открыть ссылку на головоломки, выбрать игру «Мосты» и свой номер, и когда писать «+» в чат</li></ul></div>
+<div class="step"><div class="t">Ваш раунд · 7 мин</div><ul><li>Считайте «+» и «✅ Решено» в чате</li><li>Все решают, вы следите за чатом</li><li>Отвечаете на вопросы и помогаете тем, кто «Застрял»</li><li>Заполняете лист наблюдений</li></ul></div>
 </div>
 </div></section>
 
@@ -108,17 +108,17 @@ button:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
 <section><div class="wrap">
 <h2>Что можно в онбординге</h2>
 <div class="can">
-<div><h3>Можно</h3><ul><li>Демонстрация экрана, доска Zoom</li><li>Свой мини-пример или тестовый уровень</li><li>Подсказки и ответы в чат</li><li>Подсказать первые шаги для каждого варианта</li></ul></div>
+<div><h3>Можно</h3><ul><li>Демонстрация экрана, доска Zoom</li><li>Свой мини-пример или тестовый уровень</li><li>Подсказки и ответы в чат</li><li>Подсказать, с чего начинать решать</li></ul></div>
 <div><h3>Нельзя</h3><ul><li>Показывать полное решение варианта</li><li>Выходить за 4 минуты</li></ul><p class="note">На странице с головоломками правил нет. Участники узнают их только от вас.</p></div>
 </div>
 </div></section>
 
 <section><div class="wrap">
 <h2>Ваш онбординг и наблюдения</h2>
-<p class="note" style="margin:-6px 0 18px">Заполняет один человек из команды. Ответы сохраняются только в этом браузере. На разборе нажмите «Скопировать ответы» и вставьте их в чат Zoom.</p>
+<p class="note" style="margin:-6px 0 18px">Заполняет один человек — тот, кто следит за чатом. Ответы сохраняются только в его браузере: не закрывайте вкладку и не открывайте бриф в другом браузере. На разборе нажмите «Скопировать ответы» и вставьте их в чат Zoom.</p>
 <div class="panel">
 <h3>Наш aha-момент</h3>
-<p class="help">Конкретный момент, по которому вы поймёте, что у участника получилось. Не «участник понял игру», а то, что можно заметить: сообщение в чате, ход на поле, вопрос.</p>
+<p class="help">Конкретный шаг, после которого участник дальше справляется сам. Не «понял игру», а действие. В Zoom вы не видите поля участников, поэтому сделайте этот момент видимым: в конце онбординга попросите написать «+» в чат, когда участник сделает этот шаг. Например: «напишите +, когда сделаете первый шаг сами, без подсказки». Каким будет шаг в вашей игре — решите сами.</p>
 <textarea id="aha" aria-label="Наш aha-момент"></textarea>
 </div>
 <div class="panel">
@@ -128,8 +128,11 @@ button:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
 </div>
 <div class="panel">
 <h3>Лист наблюдений</h3>
-<label>Сколько человек дошли до первого результата</label>
+<label>Написали «+» (дошли до aha-момента)</label>
+<div class="cnt"><input id="plus" inputmode="numeric" aria-label="Написали «+»"><span>из</span><input id="plusAll" inputmode="numeric" aria-label="Всего решали"></div>
+<label>Прислали «✅ Решено» за 7 минут</label>
 <div class="cnt"><input id="ok" inputmode="numeric" aria-label="Решили"><span>из</span><input id="all" inputmode="numeric" aria-label="Всего решали"></div>
+<p class="note">Вторая цифра — сколько человек решало: все в комнате, кроме вашей команды и преподавателя. Повторы одного человека считайте один раз, решения после 7 минут не считайте.</p>
 <label for="stuck">Где застревали</label><textarea id="stuck"></textarea>
 <label for="qs">Какие вопросы задавали</label><textarea id="qs"></textarea>
 <label for="good">Что сработало хорошо</label><textarea id="good"></textarea>
@@ -143,13 +146,13 @@ button:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
 {
 const K='brief2';const $=s=>document.querySelector(s);
 $('#mech').innerHTML=[1,2,3,4,5].map(i=>`<div class="mech"><span class="num">${i}</span><input id="m${i}" aria-label="Механика ${i}"><textarea id="w${i}" aria-label="Как работает механика ${i}" style="min-height:48px"></textarea></div>`).join('');
-const ids=['aha','ok','all','stuck','qs','good','better',...[1,2,3,4,5].flatMap(i=>['m'+i,'w'+i])];
+const ids=['aha','plus','plusAll','ok','all','stuck','qs','good','better',...[1,2,3,4,5].flatMap(i=>['m'+i,'w'+i])];
 let data={};try{data=JSON.parse(localStorage.getItem(K))||{}}catch(e){}
 ids.forEach(id=>{const el=$('#'+id);el.value=data[id]||'';el.addEventListener('input',()=>{data[id]=el.value;try{localStorage.setItem(K,JSON.stringify(data))}catch(e){}})});
 $('#copy').addEventListener('click',()=>{
   const v=id=>($('#'+id).value||'').trim()||'—';
   const mech=[1,2,3,4,5].filter(i=>$('#m'+i).value.trim()||$('#w'+i).value.trim()).map((i,k)=>`${k+1}. ${v('m'+i)}: ${v('w'+i)}`).join('\n')||'—';
-  const t=`Команда 2 · Мосты\nAha-момент: ${v('aha')}\nМеханики:\n${mech}\nДошли до результата: ${v('ok')} из ${v('all')}\nГде застревали: ${v('stuck')}\nВопросы: ${v('qs')}\nЧто сработало: ${v('good')}\nЧто улучшить: ${v('better')}`;
+  const t=`Команда 2 · Мосты\nAha-момент: ${v('aha')}\nМеханики:\n${mech}\nДошли до aha («+»): ${v('plus')} из ${v('plusAll')}\nРешили («✅ Решено»): ${v('ok')} из ${v('all')}\nГде застревали: ${v('stuck')}\nВопросы: ${v('qs')}\nЧто сработало: ${v('good')}\nЧто улучшить: ${v('better')}`;
   const fail=()=>{$('#msg').textContent='Скопируйте текст ниже вручную';$('#out').value=t;$('#out').style.display='block';$('#out').select()};
   try{navigator.clipboard.writeText(t).then(()=>{$('#msg').textContent='Скопировано. Вставьте в чат Zoom';$('#out').style.display='none'},fail)}catch(e){fail()}
 });
